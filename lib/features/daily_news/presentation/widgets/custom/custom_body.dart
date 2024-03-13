@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:newsapp/core/constant/app_colors.dart';
 import 'package:newsapp/core/constant/app_gaps.dart';
-import 'package:newsapp/features/daily_news/presentation/widgets/category_tile.dart';
-import 'package:newsapp/features/daily_news/presentation/widgets/custom_circle_category.dart';
-import 'package:newsapp/features/daily_news/presentation/widgets/custom_navbar.dart';
-import 'package:newsapp/features/daily_news/presentation/widgets/custom_notification.dart';
+import 'package:newsapp/features/daily_news/presentation/widgets/custom/category_tile.dart';
+import 'package:newsapp/features/daily_news/presentation/widgets/custom/custom_circle_category.dart';
+import 'package:newsapp/features/daily_news/presentation/widgets/custom/custom_navbar.dart';
+import 'package:newsapp/features/daily_news/presentation/widgets/custom/custom_notification.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:newsapp/features/daily_news/presentation/widgets/top_news_container.dart';
+import 'package:newsapp/features/daily_news/presentation/widgets/custom/top_news_container.dart';
 
 class CustomBody extends StatefulWidget {
   const CustomBody({super.key, this.onMenuTap});
@@ -28,7 +28,7 @@ class _CustomBodyState extends State<CustomBody> {
               fontWeight: FontWeight.bold,
             )),
         actions: [
-          const Custom_Notification(),
+          const CustomNotification(),
           AppGaps.wGap10,
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -51,94 +51,44 @@ class _CustomBodyState extends State<CustomBody> {
           ),
         ],
       ),
-      body: SizedBox(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 50,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return const CategoryTile();
-                },
+      body: SingleChildScrollView(
+        child: SizedBox(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return const CategoryTile();
+                  },
+                ),
               ),
-            ),
-            AppGaps.hGap15,
-            const TopNewsArticle(),
-            AppGaps.hGap10,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Text(
-                    'Explore',
-                    style: TextStyle(
-                      fontSize: 16,
-                      letterSpacing: 1.2,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              AppGaps.hGap15,
+              const TopNewsArticle(),
+              AppGaps.hGap10,
+              const CustomRow(
+                  leadingTitle: 'Explore', trailingTitle: 'See more'),
+              AppGaps.hGap10,
+              SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return const CustomCircleCategory();
+                  },
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Text(
-                    'See more',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: HexColor(AppColors.primaryActiveButtonColor),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            AppGaps.hGap10,
-            SizedBox(
-              height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return const CustomCircleCategory();
-                },
               ),
-            ),
-            AppGaps.hGap15,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Text(
-                    'Most Read',
-                    style: TextStyle(
-                      fontSize: 16,
-                      letterSpacing: 1.2,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Text(
-                    'See more',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: HexColor(AppColors.primaryActiveButtonColor),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            AppGaps.hGap10,
-            Expanded(
-              child: SizedBox(
-                height: 400,
+              AppGaps.hGap15,
+              const CustomRow(
+                  leadingTitle: 'Most Popular', trailingTitle: 'See more'),
+              AppGaps.hGap10,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   physics: const BouncingScrollPhysics(),
@@ -203,11 +153,52 @@ class _CustomBodyState extends State<CustomBody> {
                   },
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: const CustomNavBar(),
+    );
+  }
+}
+
+class CustomRow extends StatelessWidget {
+  final String? leadingTitle;
+  final String? trailingTitle;
+  const CustomRow({
+    super.key,
+    this.leadingTitle,
+    this.trailingTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 15),
+          child: Text(
+            leadingTitle ?? 'Trending',
+            style: const TextStyle(
+              fontSize: 16,
+              letterSpacing: 1.2,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 15),
+          child: Text(
+            trailingTitle ?? 'See more',
+            style: TextStyle(
+              fontSize: 12,
+              color: HexColor(AppColors.primaryActiveButtonColor),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

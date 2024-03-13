@@ -13,7 +13,8 @@ class ArticleRepositoryImpl implements ArticleRepository {
   ArticleRepositoryImpl(this._newsApiServices);
 
   @override
-  Future<DataState<List<Article>>> getNewsArticles() async {
+  Future<DataState<List<Article>>> getNewsArticles(
+      {String? country, String? category}) async {
     try {
       final httpResponse = await _newsApiServices.getNewsArticles(
         country: country,

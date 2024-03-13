@@ -4,12 +4,12 @@ import 'package:newsapp/features/daily_news/domain/entities/articles.dart';
 import 'package:newsapp/features/daily_news/domain/repository/article_repository.dart';
 
 class GetArticleUseCase
-    implements UserCase<DataState<List<AritlcesEntity>>, void> {
+    implements UserCase<DataState<List<AritlcesEntity>>, Map<String, String>> {
   final ArticleRepository _articleRepository;
 
   GetArticleUseCase(this._articleRepository);
   @override
-  Future<DataState<List<AritlcesEntity>>> call({void params}) {
-    return _articleRepository.getNewsArticles();
+  Future<DataState<List<AritlcesEntity>>> call({Map<String, String>? params})  async {
+    return await _articleRepository.getNewsArticles();
   }
 }

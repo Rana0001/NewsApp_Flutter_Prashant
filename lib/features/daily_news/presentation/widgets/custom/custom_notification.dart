@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Custom_Notification extends StatelessWidget {
-  const Custom_Notification({
+class CustomNotification extends StatelessWidget {
+  const CustomNotification({
     super.key,
   });
 
