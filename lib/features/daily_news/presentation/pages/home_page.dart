@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsapp/features/daily_news/presentation/cubit/internet_connection_cubit.dart';
 import 'package:newsapp/features/daily_news/presentation/widgets/custom/custom_body.dart';
 import 'package:newsapp/features/daily_news/presentation/widgets/custom/custom_drawer.dart';
 
@@ -67,35 +69,48 @@ class _MyAppState extends State<HomeNewsPage>
   double maxSide = 225;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onHorizontalDragUpdate: (details) {
-          if (details.primaryDelta! > 0) {
-            _animationController!.forward();
-          } else {
-            _animationController!.reverse();
-          }
-        },
-        // onTap: toggle,
-        child: AnimatedBuilder(
-            animation: _animationController!,
-            builder: (context, _) {
-              double slide = maxSide * _animationController!.value;
-              double scale = 1 - (_animationController!.value * 0.3);
-              return Stack(
-                children: [
-                  const CustomDrawer(),
-                  Transform(
-                      transform: Matrix4.identity()
-                        ..translate(slide)
-                        ..scale(scale),
-                      alignment: Alignment.centerLeft,
-                      child: CustomBody(
-                        onMenuTap: toggle,
-                      )),
-                ],
-              );
-            }),
+    return BlocListener<InternetConnectionCubit, InternetConnectionState>(
+      listener: (context, state) {
+        if (state is InternetConnectionDisconnected) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No internet connection'),
+            ),
+          );
+        }
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: GestureDetector(
+            onHorizontalDragUpdate: (details) {
+              if (details.primaryDelta! > 0) {
+                _animationController!.forward();
+              } else {
+                _animationController!.reverse();
+              }
+            },
+            // onTap: toggle,
+            child: AnimatedBuilder(
+                animation: _animationController!,
+                builder: (context, _) {
+                  double slide = maxSide * _animationController!.value;
+                  double scale = 1 - (_animationController!.value * 0.3);
+                  return Stack(
+                    children: [
+                      const CustomDrawer(),
+                      Transform(
+                          transform: Matrix4.identity()
+                            ..translate(slide)
+                            ..scale(scale),
+                          alignment: Alignment.centerLeft,
+                          child: CustomBody(
+                            onMenuTap: toggle,
+                          )),
+                    ],
+                  );
+                }),
+          ),
+        ),
       ),
     );
   }
