@@ -67,7 +67,7 @@ class _CategoryTileState extends State<CategoryTile> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 5),
                       decoration: BoxDecoration(
-                        color: !state.isDark!
+                        color: state.isDark!
                             ? HexColor(AppColors.primaryActiveButtonColor)
                             : AppColors.secondaryLightThemeColor,
                         borderRadius: BorderRadius.circular(30),
@@ -91,7 +91,7 @@ class _CategoryTileState extends State<CategoryTile> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 5),
                       decoration: BoxDecoration(
-                        color: !state.isDark!
+                        color: state.isDark!
                             ? HexColor(
                                 AppColors.primaryBottomNavBackgroundColor)
                             : AppColors.primaryLightThemeColor,
@@ -102,7 +102,7 @@ class _CategoryTileState extends State<CategoryTile> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: !state.isDark!
+                          color: state.isDark!
                               ? HexColor(AppColors.secondaryInActiveButtonColor)
                               : Colors.white,
                         ),

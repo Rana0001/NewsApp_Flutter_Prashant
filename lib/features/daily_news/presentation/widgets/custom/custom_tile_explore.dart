@@ -67,7 +67,7 @@ class _CustomTileExploreState extends State<CustomTileExplore> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: !state.isDark! ? Colors.white : Colors.black,
+                        color: state.isDark! ? Colors.white : Colors.black,
                       ),
                     ),
                     AppGaps.hGap5,
@@ -75,7 +75,7 @@ class _CustomTileExploreState extends State<CustomTileExplore> {
                       widget.article!.description! ?? "",
                       style: TextStyle(
                         fontSize: 12,
-                        color: !state.isDark! ? Colors.white : Colors.black,
+                        color: state.isDark! ? Colors.white : Colors.black,
                       ),
                     ),
                     AppGaps.hGap5,
@@ -83,13 +83,13 @@ class _CustomTileExploreState extends State<CustomTileExplore> {
                       dateTime!,
                       style: TextStyle(
                         fontSize: 12,
-                        color: !state.isDark!
+                        color: state.isDark!
                             ? HexColor(AppColors.secondaryInActiveButtonColor)
                             : AppColors.darkLightThemeColor,
                       ),
                     ),
                     Divider(
-                      color: !state.isDark!
+                      color: state.isDark!
                           ? HexColor(AppColors.secondaryInActiveButtonColor)
                           : AppColors.primaryLightThemeColor,
                     )

@@ -42,7 +42,7 @@ class _ExplorePageState extends State<ExplorePage> {
       );
     }
     return Container(
-        color: !state.isDark!
+        color: state.isDark!
             ? HexColor(AppColors.primaryDarkThemeBackgroundColor)
             : AppColors.shadeLightThemeColor1,
         child: Column(
@@ -62,7 +62,7 @@ class _ExplorePageState extends State<ExplorePage> {
                         fontSize: 30,
                         letterSpacing: 1.2,
                         fontWeight: FontWeight.bold,
-                        color: !state.isDark! ? Colors.white : Colors.black,
+                        color: state.isDark! ? Colors.white : Colors.black,
                       ),
                     ),
                   ),
@@ -99,7 +99,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 children: [
                   SvgPicture.asset(
                     AppImagePath.lineChartIcon,
-                    color: !state.isDark! ? Colors.white : Colors.black,
+                    color: state.isDark! ? Colors.white : Colors.black,
                     height: 25,
                     width: 25,
                   ),
@@ -110,7 +110,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       letterSpacing: 1,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: state.isDark! ? Colors.black : Colors.white,
+                      color: state.isDark! ? Colors.white : Colors.black,
                     ),
                   ),
                 ],
@@ -120,20 +120,20 @@ class _ExplorePageState extends State<ExplorePage> {
                 child: SizedBox(
               height: 200,
               child: BlocBuilder<ArticleBloc, ArticleState>(
-                builder: (context, state) {
-                  if (state is ArticleLoading) {
+                builder: (context, stateArticle) {
+                  if (stateArticle is ArticleLoading) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else if (state is ArticleError) {
+                  } else if (stateArticle is ArticleError) {
                     return const ErrorPage();
-                  } else if (state is ArticleSuccess &&
-                      state.articles.isNotEmpty) {
+                  } else if (stateArticle is ArticleSuccess &&
+                      stateArticle.articles.isNotEmpty) {
                     return RefreshIndicator(
                       onRefresh: () async {},
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
-                          itemCount: state.articles.length,
+                          itemCount: stateArticle.articles.length,
                           physics: const ClampingScrollPhysics(),
                           itemBuilder: (context, index) {
                             return InkWell(
@@ -142,13 +142,16 @@ class _ExplorePageState extends State<ExplorePage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ArticleDetailsPage(
-                                        articleEntity: state.articles[index],
+                                        articleEntity:
+                                            stateArticle.articles[index],
+                                        state: state,
                                       ),
                                     ),
                                     (route) => true);
                               },
                               child: CustomTileExplore(
-                                  index: index, article: state.articles[index]),
+                                  index: index,
+                                  article: stateArticle.articles[index]),
                             );
                           }),
                     );

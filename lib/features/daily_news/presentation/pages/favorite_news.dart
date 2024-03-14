@@ -48,7 +48,7 @@ class _FavoritePageState extends State<FavoritePage> {
       },
       builder: (context, state) {
         return Container(
-          color: !stateTheme.isDark!
+          color: stateTheme.isDark!
               ? HexColor(AppColors.primaryDarkThemeBackgroundColor)
               : AppColors.shadeLightThemeColor1,
           child: Column(
@@ -64,14 +64,13 @@ class _FavoritePageState extends State<FavoritePage> {
                     child: SizedBox(
                       child: Text("Favorite News",
                           style: TextStyle(
-                            fontSize: 30,
-                            letterSpacing: 1.2,
-                            fontWeight: FontWeight.bold,
-                            color: stateTheme.isDark!
-                                ? HexColor(
-                                    AppColors.primaryDarkThemeBackgroundColor)
-                                : AppColors.shadeLightThemeColor1,
-                          )),
+                              fontSize: 30,
+                              letterSpacing: 1.2,
+                              fontWeight: FontWeight.bold,
+                              color: stateTheme.isDark!
+                                  ? AppColors.shadeLightThemeColor1
+                                  : HexColor(AppColors
+                                      .primaryDarkThemeBackgroundColor))),
                     ),
                   ),
                 ],
@@ -118,7 +117,9 @@ class _FavoritePageState extends State<FavoritePage> {
                           return null;
                         },
                         background: Container(
-                          color: HexColor(AppColors.primaryDarkBackgroundColor),
+                          color: stateTheme.isDark!
+                              ? HexColor(AppColors.primaryDarkBackgroundColor)
+                              : AppColors.primaryLightThemeColor,
                           alignment: Alignment.centerLeft,
                         ),
                         secondaryBackground: Container(
@@ -139,6 +140,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                 MaterialPageRoute(
                                   builder: (context) => ArticleDetailsPage(
                                     articleEntity: state.articles[index],
+                                    state: stateTheme,
                                     isPressed: true,
                                   ),
                                 ),

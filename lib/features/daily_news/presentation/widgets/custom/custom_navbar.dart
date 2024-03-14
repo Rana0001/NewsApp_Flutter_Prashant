@@ -33,7 +33,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           padding: const EdgeInsetsDirectional.symmetric(
               horizontal: 15, vertical: 10),
           decoration: BoxDecoration(
-            color: !state.isDark!
+            color: state.isDark!
                 ? HexColor(AppColors.primaryBottomNavBackgroundColor)
                 : AppColors.primaryLightThemeColor,
           ),
@@ -41,7 +41,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
               padding: AppGaps.paddingAll15,
               activeColor: const Color(0xFFF7F7FB),
               color: const Color(0xFFF7F7FB),
-              tabBackgroundColor: !state.isDark!
+              tabBackgroundColor: state.isDark!
                   ? HexColor(AppColors.primaryActiveButtonColor)
                   : AppColors.secondaryLightThemeColor,
               gap: 10,

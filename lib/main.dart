@@ -69,18 +69,18 @@ class _MyAppState extends State<MyApp> {
             create: (context) =>
                 InternetConnectionCubit(connectivity: widget.connectivity),
           ),
+          BlocProvider<ThemeModeChangeCubit>(
+            create: (context) => ThemeModeChangeCubit(),
+          ),
           BlocProvider<ArticleBloc>(
             create: (context) =>
                 ArticleBloc(newsApiServices: NewsApiServices()),
           ),
-          BlocProvider<ActiveIndexCubit>(
-            create: (context) => ActiveIndexCubit(),
-          ),
           BlocProvider<UserBloc>(
             create: (context) => UserBloc(UserRemoteServices()),
           ),
-          BlocProvider<ThemeModeChangeCubit>(
-            create: (context) => ThemeModeChangeCubit(),
+          BlocProvider<ActiveIndexCubit>(
+            create: (context) => ActiveIndexCubit(),
           ),
         ],
         child: BlocBuilder<ThemeModeChangeCubit, ThemeModeChangeState>(
@@ -89,17 +89,11 @@ class _MyAppState extends State<MyApp> {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'News App',
-                themeMode: ThemeMode.dark,
+                themeMode: stateData.isDark! ? ThemeMode.dark : ThemeMode.light,
+                initialRoute: "/",
                 darkTheme: ThemeConfig.getDarkThemeData(),
                 theme: ThemeConfig.getLightThemeData(),
                 // home: const HomeNewsPage(),
-                onGenerateInitialRoutes: (initialRoute) {
-                  return [
-                    MaterialPageRoute(
-                      builder: (context) => SplashScreen(),
-                    ),
-                  ];
-                },
                 onGenerateRoute: widget.appRoutes!.onGenerateRoute,
               );
             }

@@ -39,7 +39,7 @@ class CustomCircleCategory extends StatelessWidget {
               countries[index!],
               style: TextStyle(
                 fontSize: 12,
-                color: !state.isDark!
+                color: state.isDark!
                     ? HexColor(AppColors.secondaryInActiveButtonColor)
                     : AppColors.darkLightThemeColor,
                 fontWeight: FontWeight.w500,

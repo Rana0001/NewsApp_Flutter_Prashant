@@ -21,7 +21,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     setState(() {
       Timer.periodic(const Duration(milliseconds: 50), (timer) {

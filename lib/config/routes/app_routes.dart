@@ -18,6 +18,18 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
                   value: _themeModeChangeCubit,
+                  child: const SplashScreen(),
+                ));
+      case "/login":
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _themeModeChangeCubit,
+                  child: const LoginPage(),
+                ));
+      case '/home':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _themeModeChangeCubit,
                   child: const HomeNewsPage(),
                 ));
       case '/favourite':
@@ -33,18 +45,6 @@ class AppRoutes {
             child: ArticleDetailsPage(),
           ),
         );
-      case "/login":
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-                  value: _themeModeChangeCubit,
-                  child: const LoginPage(),
-                ));
-      case '/splashScreen':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-                  value: _themeModeChangeCubit,
-                  child: SplashScreen(),
-                ));
 
       default:
         return MaterialPageRoute(

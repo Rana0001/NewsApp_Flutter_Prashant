@@ -9,7 +9,17 @@ import 'package:newsapp/features/daily_news/presentation/cubit/internet_connecti
 part 'theme_mode_change_state.dart';
 
 class ThemeModeChangeCubit extends HydratedCubit<ThemeModeChangeState> {
-  ThemeModeChangeCubit() : super(const ThemeModeChangeState(isDark: false));
+  ThemeModeChangeCubit() : super(_loadInitialThemeMode());
+
+  static ThemeModeChangeState _loadInitialThemeMode() {
+    final savedData = HydratedBloc.storage.read('theme_mode');
+    if (savedData != null) {
+      final parsedData = jsonDecode(savedData);
+      return ThemeModeChangeState(isDark: parsedData['isDark']);
+    } else {
+      return const ThemeModeChangeState(isDark: false);
+    }
+  }
 
   void changeThemeMode({required bool? isDark}) {
     emit(ThemeModeChangeState(isDark: isDark));

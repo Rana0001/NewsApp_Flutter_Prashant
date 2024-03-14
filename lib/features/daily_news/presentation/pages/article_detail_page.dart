@@ -17,6 +17,7 @@ class ArticleDetailsPage extends StatefulWidget {
   final ArticleEntity? articleEntity;
   final String? category;
   final String? country;
+  final ThemeModeChangeState? state;
   bool? isPressed;
   ArticleDetailsPage({
     super.key,
@@ -24,6 +25,7 @@ class ArticleDetailsPage extends StatefulWidget {
     this.country = "US",
     this.isPressed = false,
     this.articleEntity,
+    this.state,
   });
 
   @override
@@ -33,90 +35,90 @@ class ArticleDetailsPage extends StatefulWidget {
 class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<ThemeModeChangeCubit>().state;
     final stateActiveIndex = context.watch<ActiveIndexCubit>().state;
     final articleState = context.read<ArticleBloc>();
     String? dateTime = DateFormat.yMMMMd().format(
       DateTime.parse(widget.articleEntity!.publishedAt!),
     );
-    if (state.isDark == null) {
+    if (widget.state!.isDark == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
-
-    return BlocListener<ArticleBloc, ArticleState>(
-      listener: (context, state) {
-        if (state is ArticleError) {
-          flushBarMessage(
-            "Something went wrong to favorites",
-            "Error",
-            Colors.red,
-          ).show(context);
-        } else if (state is ArticleLoading) {
-          const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is ArticleSuccess) {
-          flushBarMessage(
-            "Added to favorites",
-            "Success",
-            Colors.green,
-          ).show(context);
-        } else if (state is ArticleRemovedFromFavorites) {
-          flushBarMessage(
-            "Article Removed to favorites",
-            "Success",
-            Colors.red,
-          ).show(context);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color:
-                state.isDark! ? Colors.black : AppColors.shadeLightThemeColor1,
-          ),
-          backgroundColor: !state.isDark!
-              ? HexColor(AppColors.primaryDarkThemeBackgroundColor)
-              : AppColors.shadeLightThemeColor1,
-          actions: [
-            !widget.isPressed!
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.isPressed = !widget.isPressed!;
-                      });
-                      articleState.add(
-                          AddToFavorites(articleEntity: widget.articleEntity!));
-                    },
-                    icon: const Icon(
-                      Icons.bookmark_outline_outlined,
-                      color: Colors.teal,
-                    ),
-                  )
-                : IconButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.isPressed = !widget.isPressed!;
-                      });
-                      articleState.add(
-                        RemoveFromFavorites(
-                            articleEntity: widget.articleEntity!),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.bookmark,
-                      color: Colors.teal,
-                    ),
-                  ),
-          ],
+    print("isPressed: ${widget.state!.isDark}");
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: widget.state!.isDark!
+            ? HexColor(AppColors.primaryDarkThemeBackgroundColor)
+            : AppColors.shadeLightThemeColor1,
+        iconTheme: IconThemeData(
+          color: widget.state!.isDark!
+              ? AppColors.shadeLightThemeColor1
+              : HexColor(AppColors.primaryDarkThemeBackgroundColor),
         ),
-        body: Container(
-          color: state.isDark!
-              ? HexColor(AppColors.primaryDarkThemeBackgroundColor)
-              : AppColors.shadeLightThemeColor1,
-          child: SingleChildScrollView(
+        elevation: 0,
+        actions: [
+          !widget.isPressed!
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.isPressed = !widget.isPressed!;
+                    });
+                    articleState.add(
+                        AddToFavorites(articleEntity: widget.articleEntity!));
+                  },
+                  icon: const Icon(
+                    Icons.bookmark_outline_outlined,
+                    color: Colors.teal,
+                  ),
+                )
+              : IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.isPressed = !widget.isPressed!;
+                    });
+                    articleState.add(
+                      RemoveFromFavorites(articleEntity: widget.articleEntity!),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.bookmark,
+                    color: Colors.teal,
+                  ),
+                ),
+        ],
+      ),
+      body: BlocListener<ArticleBloc, ArticleState>(
+        listener: (context, state) {
+          if (state is ArticleError) {
+            flushBarMessage(
+              "Something went wrong to favorites",
+              "Error",
+              Colors.red,
+            ).show(context);
+          } else if (state is ArticleLoading) {
+            const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is ArticleSuccess) {
+            flushBarMessage(
+              "Added to favorites",
+              "Success",
+              Colors.green,
+            ).show(context);
+          } else if (state is ArticleRemovedFromFavorites) {
+            flushBarMessage(
+              "Article Removed to favorites",
+              "Success",
+              Colors.red,
+            ).show(context);
+          }
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            color: widget.state!.isDark!
+                ? HexColor(AppColors.primaryDarkThemeBackgroundColor)
+                : AppColors.shadeLightThemeColor1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -126,7 +128,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                       backgroundColor: Colors.white,
                       child: SvgPicture.asset(
                         AppImagePath.verifiedUser,
-                        color: !state.isDark!
+                        color: widget.state!.isDark!
                             ? HexColor(AppColors.primaryActiveButtonColor)
                             : AppColors.primaryLightThemeColor,
                         height: 30,
@@ -134,11 +136,21 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                     ),
                   ),
                   title: Text(widget.articleEntity!.author! ?? "John Doe",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  subtitle: Text(dateTime),
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: widget.state!.isDark!
+                              ? AppColors.shadeLightThemeColor1
+                              : HexColor(
+                                  AppColors.primaryDarkThemeBackgroundColor))),
+                  subtitle: Text(dateTime,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: widget.state!.isDark!
+                              ? AppColors.shadeLightThemeColor1
+                              : HexColor(
+                                  AppColors.primaryDarkThemeBackgroundColor))),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -219,10 +231,10 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                             padding: const EdgeInsets.only(left: 15),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: state.isDark!
-                                    ? HexColor(
-                                        AppColors.primaryActiveButtonColor)
-                                    : Colors.grey[300],
+                                color: widget.state!.isDark!
+                                    ? AppColors.secondaryLightThemeColor
+                                    : HexColor(
+                                        AppColors.primaryActiveButtonColor),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Center(
@@ -249,7 +261,7 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 5),
                             decoration: BoxDecoration(
-                              color: !state.isDark!
+                              color: widget.state!.isDark!
                                   ? HexColor(AppColors.primaryActiveButtonColor)
                                   : AppColors.secondaryLightThemeColor,
                               borderRadius: BorderRadius.circular(30),
@@ -274,9 +286,12 @@ class _ArticleDetailsPageState extends State<ArticleDetailsPage> {
                   child: Text(
                     "${widget.articleEntity!.description} ${widget.articleEntity!.content}" ??
                         "Beyoncé has revealed the name of her upcoming country album, which is set to be released on November 12. The singer, 40, announced the news on her website on Tuesday, July 20, sharing a photo of a field of flowers with the words “Beyoncé” and “Be Alive” written in the sky. “‘Be Alive’ is a powerful, anthemic song that will be featured in the upcoming film King Richard, which stars Will Smith as Richard Williams, the father of Venus and Serena Williams,” the post read. “The song is a celebration of the human spirit, a tribute to the resilience of humans throughout the ages, from the first slaves who worked the land, to the present-day heroes of the world’s most popular sport, tennis.”",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
+                      color: widget.state!.isDark!
+                          ? AppColors.shadeLightThemeColor1
+                          : HexColor(AppColors.primaryDarkThemeBackgroundColor),
                     ),
                   ),
                 ),

@@ -34,80 +34,78 @@ class _CustomTileState extends State<CustomTile> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<ThemeModeChangeCubit>().state;
-    if (state.isDark == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    return InkWell(
-      onTap: widget.onTap,
-      child: Container(
-        padding: const EdgeInsets.only(left: 15, bottom: 10),
-        child: Row(
-          children: [
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(
-                    widget.articleEntity!.urlToImage ??
-                        "https://www.usmagazine.com/wp-content/uploads/2019/07/Beyonce-Spirit-Video-Looks-1.jpg?w=1200&quality=86&strip=all",
-                    errorListener: (p0) {
-                      print("error-11");
-                    },
+    return BlocBuilder<ThemeModeChangeCubit, ThemeModeChangeState>(
+      builder: (context, state) {
+        return InkWell(
+          onTap: widget.onTap,
+          child: Container(
+            padding: const EdgeInsets.only(left: 15, bottom: 10),
+            child: Row(
+              children: [
+                Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                        widget.articleEntity!.urlToImage ??
+                            "https://www.usmagazine.com/wp-content/uploads/2019/07/Beyonce-Spirit-Video-Looks-1.jpg?w=1200&quality=86&strip=all",
+                        errorListener: (p0) {
+                          print("error-11");
+                        },
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  fit: BoxFit.cover,
                 ),
-              ),
-            ),
-            AppGaps.wGap10,
-            Expanded(
-              child: Wrap(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                AppGaps.wGap10,
+                Expanded(
+                  child: Wrap(
                     children: [
-                      Text(
-                        widget.articleEntity!.title! ?? "Title",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: !state.isDark!
-                              ? AppColors.shadeLightThemeColor1
-                              : AppColors.darkLightThemeColor,
-                        ),
-                      ),
-                      AppGaps.hGap5,
-                      Text(
-                        widget.articleEntity!.source! ?? "Author",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: state.isDark!
-                              ? AppColors.darkLightThemeColor
-                              : AppColors.shadeLightThemeColor1,
-                        ),
-                      ),
-                      AppGaps.hGap5,
-                      Text(
-                        dateTime ?? "Date",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: state.isDark!
-                              ? AppColors.darkLightThemeColor
-                              : AppColors.shadeLightThemeColor1,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.articleEntity!.title! ?? "Title",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: state.isDark!
+                                  ? AppColors.shadeLightThemeColor1
+                                  : AppColors.darkLightThemeColor,
+                            ),
+                          ),
+                          AppGaps.hGap5,
+                          Text(
+                            widget.articleEntity!.source! ?? "Author",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: state.isDark!
+                                  ? AppColors.shadeLightThemeColor1
+                                  : AppColors.darkLightThemeColor,
+                            ),
+                          ),
+                          AppGaps.hGap5,
+                          Text(
+                            dateTime ?? "Date",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: state.isDark!
+                                  ? AppColors.shadeLightThemeColor1
+                                  : AppColors.darkLightThemeColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

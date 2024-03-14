@@ -15,25 +15,20 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<ThemeModeChangeCubit>().state;
     final googleLoginState = context.read<UserBloc>();
-    if (state.isDark == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+
     return BlocListener<UserBloc, UserState>(
-      listener: (context, state) {
-        if (state is UserSuccess) {
-          Navigator.pushNamed(context, "/");
+      listener: (context, stateUser) {
+        if (stateUser is UserSuccess) {
+          Navigator.pushNamed(context, "/home");
           flushBarMessage(
                   "Login Successful", "Login", AppColors.successLightThemeColor)
               .show(context);
-        } else if (state is UserError) {
+        } else if (stateUser is UserError) {
           flushBarMessage("Something went wrong!", "Login",
                   AppColors.alertLightThemeColor)
               .show(context);
-        } else if (state is UserLoading) {
+        } else if (stateUser is UserLoading) {
           const Center(
             child: CircularProgressIndicator(),
           );
@@ -111,13 +106,10 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     AppGaps.hGap20,
-                    Text(
+                    const Text(
                       "Developed by: Prashant Rana Magar",
                       style: TextStyle(
                         fontSize: 14,
-                        color: !state.isDark!
-                            ? Colors.white
-                            : HexColor(AppColors.secondaryInActiveButtonColor),
                       ),
                     ),
                   ],
@@ -138,7 +130,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Flushbar<dynamic> flushBarMessage(
-      String? message, String? title, Color? color ) {
+      String? message, String? title, Color? color) {
     return Flushbar(
       message: message,
       title: title,

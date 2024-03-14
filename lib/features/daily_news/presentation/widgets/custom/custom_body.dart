@@ -92,13 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ));
           },
           strokeWidth: 3,
-          color: !state.isDark!
+          color: state.isDark!
               ? HexColor(AppColors.primaryActiveButtonColor)
               : AppColors.primaryLightThemeColor,
           triggerMode: RefreshIndicatorTriggerMode.onEdge,
           child: SingleChildScrollView(
             child: Container(
-              color: !state.isDark!
+              color: state.isDark!
                   ? HexColor(AppColors.primaryDarkThemeBackgroundColor)
                   : AppColors.shadeLightThemeColor1,
               child: Column(
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text('Discover',
                                 style: TextStyle(
                                   fontSize: 30,
-                                  color: !state.isDark!
+                                  color: state.isDark!
                                       ? Colors.white
                                       : Colors.black,
                                   letterSpacing: 1.2,
@@ -195,15 +195,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
                     child: BlocBuilder<ArticleBloc, ArticleState>(
-                      builder: (context, state) {
-                        if (state is ArticleSuccess &&
-                            state.articles.isNotEmpty) {
+                      builder: (context, stateArticle) {
+                        if (stateArticle is ArticleSuccess &&
+                            stateArticle.articles.isNotEmpty) {
                           return ListView.builder(
                             scrollDirection: Axis.vertical,
                             physics: const BouncingScrollPhysics(),
-                            itemCount: state.articles.length,
+                            itemCount: stateArticle.articles.length,
                             itemBuilder: (context, index) {
-                              final article = state.articles[index];
+                              final article = stateArticle.articles[index];
 
                               return CustomTile(
                                   articleEntity: article,
@@ -212,16 +212,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .push(MaterialPageRoute(
                                       builder: (context) => ArticleDetailsPage(
                                         articleEntity: article,
+                                        state: state,
                                       ),
                                     ));
                                   });
                             },
                           );
-                        } else if (state is ArticleError) {
+                        } else if (stateArticle is ArticleError) {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
-                        } else if (state is ArticleLoading) {
+                        } else if (stateArticle is ArticleLoading) {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
@@ -237,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       } else {
         return CircularProgressIndicator(
-          color: !state.isDark!
+          color: state.isDark!
               ? HexColor(AppColors.primaryActiveButtonColor)
               : AppColors.primaryLightThemeColor,
         );
@@ -271,7 +272,7 @@ class CustomRow extends StatelessWidget {
                     fontSize: 16,
                     letterSpacing: 1.2,
                     fontWeight: FontWeight.bold,
-                    color: !state.isDark! ? Colors.white : Colors.black,
+                    color: state.isDark! ? Colors.white : Colors.black,
                   ),
                 ),
               ),

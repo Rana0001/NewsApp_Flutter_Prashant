@@ -7,7 +7,6 @@ class ThemeConfig {
     return ThemeData(
       visualDensity: VisualDensity.adaptivePlatformDensity,
       fontFamily: GoogleFonts.poppins().fontFamily,
-      brightness: Brightness.light,
     );
   }
 

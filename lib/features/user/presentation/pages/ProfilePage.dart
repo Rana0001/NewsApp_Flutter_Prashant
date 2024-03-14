@@ -43,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
       },
       child: SafeArea(
         child: Container(
-          color: !state.isDark!
+          color: state.isDark!
               ? HexColor(AppColors.primaryDarkThemeBackgroundColor)
               : AppColors.shadeLightThemeColor1,
           child: Column(
@@ -89,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontSize: 18,
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             fontWeight: FontWeight.bold,
-                            color: !state.isDark!
+                            color: state.isDark!
                                 ? HexColor(
                                     AppColors.secondaryInActiveButtonColor)
                                 : AppColors.darkLightThemeColor,
@@ -110,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontFamily: GoogleFonts.poppins().fontFamily,
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: !state.isDark!
+                      color: state.isDark!
                           ? HexColor(AppColors.secondaryInActiveButtonColor)
                           : AppColors.darkLightThemeColor,
                     ),
@@ -136,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: !state.isDark!
+                      color: state.isDark!
                           ? HexColor(AppColors.secondaryInActiveButtonColor)
                           : AppColors.darkLightThemeColor,
                     ),
@@ -161,14 +161,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     ? AppColors.primaryLightThemeColor
                     : HexColor(AppColors.primaryActiveButtonColor),
                 onTap: () {
-                  if (!state.isDark!) {
-                    context
-                        .read<ThemeModeChangeCubit>()
-                        .changeThemeMode(isDark: true);
-                  } else if (state.isDark!) {
-                    context
-                        .read<ThemeModeChangeCubit>()
-                        .changeThemeMode(isDark: false);
+                  if (state.isDark!) {
+                    setState(() {
+                      context
+                          .read<ThemeModeChangeCubit>()
+                          .changeThemeMode(isDark: false);
+                    });
+                  } else {
+                    setState(() {
+                      context
+                          .read<ThemeModeChangeCubit>()
+                          .changeThemeMode(isDark: true);
+                    });
                   }
                 },
                 child: customSettingTile(
@@ -195,7 +199,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: MaterialButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            color: !state.isDark!
+                            color: state.isDark!
                                 ? HexColor(AppColors.primaryActiveButtonColor)
                                 : AppColors.primaryLightThemeColor,
                             onPressed: () {
@@ -241,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: !state.isDark!
+              color: state.isDark!
                   ? HexColor(AppColors.secondaryInActiveButtonColor)
                   : AppColors.darkLightThemeColor,
             ),
@@ -258,7 +262,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   offset: const Offset(0, 3),
                 ),
               ],
-              color: !state.isDark!
+              color: state.isDark!
                   ? HexColor(AppColors.primaryActiveButtonColor)
                   : AppColors.primaryTileButtonLightColor,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
